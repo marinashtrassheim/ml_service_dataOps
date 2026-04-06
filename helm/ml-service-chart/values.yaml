@@ -1,0 +1,78 @@
+# Количество реплик
+replicaCount: 2
+
+# Настройки образа
+image:
+  repository: ml_service-ml-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# Настройки стратегии обновления
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 0
+
+# Настройки сервиса
+service:
+  name: ml-service
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+# Настройки Ingress
+ingress:
+  enabled: false
+  className: nginx
+  host: ml-service.local
+  path: /
+  pathType: Prefix
+
+# Переменные окружения (несекретные)
+configMap:
+  MODEL_VERSION: "v1.0.0"
+  LOG_LEVEL: "INFO"
+
+# Секретные переменные (в values.yaml только для примера)
+secrets:
+  DATABASE_URL: "postgresql://ml_user:ml_pass@postgres:5432/ml_db"
+
+# Настройки ресурсов
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+# Настройки probes (проверки)
+probes:
+  startup:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    failureThreshold: 30
+  readiness:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    failureThreshold: 3
+  liveness:
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    failureThreshold: 3
+
+# Настройки PostgreSQL (если нужен отдельный чарт)
+postgresql:
+  enabled: true
+  auth:
+    username: ml_user
+    password: ml_pass
+    database: ml_db
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"

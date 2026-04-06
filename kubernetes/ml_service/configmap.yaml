@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ml-service-config
+data:
+  MODEL_VERSION: "v1.0.0"
+  LOG_LEVEL: "INFO"

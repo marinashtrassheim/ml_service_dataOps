@@ -1,0 +1,19 @@
+services:
+  jupyterhub:
+    build: .
+    container_name: jupyterhub-server
+    environment:
+      - JUPYTERHUB_ADMIN_USER=${JUPYTERHUB_ADMIN_USER:-admin}
+      - JUPYTERHUB_ADMIN_PASSWORD=${JUPYTERHUB_ADMIN_PASSWORD:-admin}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./notebooks:/home/jupyterhub/notebooks
+      - ./jupyterhub_config.py:/etc/jupyterhub/jupyterhub_config.py
+    restart: unless-stopped
+    networks:
+      - jupyterhub-network
+
+networks:
+  jupyterhub-network:
+    driver: bridge

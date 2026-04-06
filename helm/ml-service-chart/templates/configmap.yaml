@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ml-service.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ml-service.labels" . | nindent 4 }}
+data:
+  MODEL_VERSION: {{ .Values.configMap.MODEL_VERSION | quote }}
+  LOG_LEVEL: {{ .Values.configMap.LOG_LEVEL | quote }}

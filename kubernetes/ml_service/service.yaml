@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ml-service
+  namespace: default
+  labels:
+    app: ml-service
+spec:
+  selector:
+    app: ml-service
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8000
+  type: ClusterIP
